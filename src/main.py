@@ -9,17 +9,23 @@ import asyncio
 
 def coletar_dados(inputData):
     with sync_playwright() as p:
-        browser = p.firefox.launch(headless=True)
-        page = browser.new_page()
+        browser = p.firefox.launch(headless=False)
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        )
+        page = context.new_page()
 
         page.goto(
             f"https://portaldatransparencia.gov.br/pessoa-fisica/busca/lista?termo={inputData}&pagina=1&tamanhoPagina=10"
         )
-        # page.wait_for_load_state("load")
+        # page.goto(
+        #     "https://portaldatransparencia.gov.br/beneficios/auxilio-emergencial/211003207?ordenarPor=numeroParcela&direcao=desc"
+        # )
+        page.wait_for_load_state("load")
 
-        # cookie_btn = page.locator("#accept-all-btn")
-        # if cookie_btn.is_visible():
-        #     cookie_btn.click()
+        cookie_btn = page.locator("#accept-all-btn")
+        if cookie_btn.is_visible():
+            cookie_btn.click()
 
         # cpf_consult_btn = page.locator("#button-consulta-pessoa-fisica")
         # if cpf_consult_btn.is_visible():
@@ -44,9 +50,10 @@ def coletar_dados(inputData):
         #     termo_input.fill(nome)
         #     sleep(0.3)
         #     termo_input.press("Enter")
-        cookie_btn = page.locator("#accept-all-btn")
-        if cookie_btn.is_visible():
-            cookie_btn.click()
+
+        # cookie_btn = page.locator("#accept-all-btn")
+        # if cookie_btn.is_visible():
+        #     cookie_btn.click()
 
         page.wait_for_selector("span#resultados")
 
@@ -60,17 +67,16 @@ def coletar_dados(inputData):
 
         if cookie_btn.is_visible():
             cookie_btn.click()
-        # se o botão button.header__button estiver visível, clique nele
-        # incomes_button = page.locator(
-        #     '//*[@aria-controls="accordion-recebimentos-recursos"]'
-        # )
+
         incomes_button = page.locator("button.header")
+
         sleep(0.3)
-        # print(incomes_button)
+
         if incomes_button.is_visible() and incomes_button.is_enabled():
             incomes_button.click()
         else:
             print("button incomes not found")
+
         page.wait_for_load_state()
 
         benefict_name = page.locator("div.responsive > strong").nth(0).inner_text()
@@ -81,7 +87,35 @@ def coletar_dados(inputData):
 
         page.wait_for_load_state("load")
 
+        sleep(15)
+
+        page.wait_for_load_state("load")
+
+        if cookie_btn.is_visible():
+            cookie_btn.click()
+
         screenshot_path = f"page_{datetime.now().isoformat()}.png"
+
+        recieved_incomes_thead = page.locator("th").all()
+
+        sleep(1)
+
+        recieved_incomes_keys = []
+
+        for th in recieved_incomes_thead:
+            recieved_incomes_keys.append(th.inner_text().strip())
+
+        sleep(1)
+
+        recieved_incomes_values = page.locator("tr").all()
+        beneficts = []
+
+        for tr in recieved_incomes_values:
+            item = tr.locator("td").all()
+            data = {}
+            for i, td in enumerate(item):
+                data[recieved_incomes_keys[i]] = td.inner_text().strip()
+                beneficts.append(data)
 
         page.screenshot(path=screenshot_path, full_page=True)
 
@@ -93,8 +127,8 @@ def coletar_dados(inputData):
             "data_consulta": datetime.now().isoformat(),
             "beneficio": benefict_name,
             "valor": recieved_value,
+            "beneficios": [beneficts],
             "imagem_base64": imagem_base64,
-            "beneficios": [],
         }
 
         browser.close()
