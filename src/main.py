@@ -91,7 +91,7 @@ def coletar_dados(inputData):
         with open(screenshot_path, "rb") as img_file:
             imagem_base64 = base64.b64encode(img_file.read()).decode("utf-8")
 
-        resultado = {
+        results = {
             "termo_da_busca": inputData,
             "data_consulta": datetime.now().isoformat(),
             "beneficio": benefict_name,
@@ -102,14 +102,14 @@ def coletar_dados(inputData):
 
         browser.close()
         os.remove(screenshot_path)
-
-        return resultado
+        print(results)
+        return results
 
 
 def main():
     dados = coletar_dados("maykel felipe")
-    with open("resultado.json", "w") as f:
-        json.dump(dados, f, indent=2)
+    with open("results.json", "w") as f:
+        json.dump(dados, f, indent=2, ensure_ascii=False)
 
 
 # Teste simples
