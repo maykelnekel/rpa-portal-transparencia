@@ -3,8 +3,7 @@ import base64
 import json
 import os
 from datetime import datetime
-from time import sleep, gmtime
-import asyncio
+from time import sleep
 
 
 def coletar_dados(inputData):
@@ -18,42 +17,12 @@ def coletar_dados(inputData):
         page.goto(
             f"https://portaldatransparencia.gov.br/pessoa-fisica/busca/lista?termo={inputData}&pagina=1&tamanhoPagina=10"
         )
-        # page.goto(
-        #     "https://portaldatransparencia.gov.br/beneficios/auxilio-emergencial/211003207?ordenarPor=numeroParcela&direcao=desc"
-        # )
+
         page.wait_for_load_state("load")
 
         cookie_btn = page.locator("#accept-all-btn")
         if cookie_btn.is_visible():
             cookie_btn.click()
-
-        # cpf_consult_btn = page.locator("#button-consulta-pessoa-fisica")
-        # if cpf_consult_btn.is_visible():
-        #     cpf_consult_btn.click()
-
-        # page.wait_for_load_state("load")
-        # if cookie_btn.is_visible():
-        #     cookie_btn.click()
-
-        # refined_search_btn = page.locator('//*[@aria-controls="box-busca-refinada"]')
-        # if refined_search_btn.is_visible():
-        #     refined_search_btn.click()
-
-        # social_program_checkbox = page.locator('//*[@for="beneficiarioProgramaSocial"]')
-        # if social_program_checkbox.is_visible():
-        #     social_program_checkbox.click()
-
-        # termo_input = page.locator("input#termo")
-        # if termo_input.is_visible():
-        #     termo_input.fill(nome)
-        #     page.evaluate('document.querySelector("input#termo").value = ""')
-        #     termo_input.fill(nome)
-        #     sleep(0.3)
-        #     termo_input.press("Enter")
-
-        # cookie_btn = page.locator("#accept-all-btn")
-        # if cookie_btn.is_visible():
-        #     cookie_btn.click()
 
         page.wait_for_selector("span#resultados")
 
@@ -132,7 +101,7 @@ def coletar_dados(inputData):
         }
 
         browser.close()
-        # os.remove(screenshot_path)
+        os.remove(screenshot_path)
 
         return resultado
 
