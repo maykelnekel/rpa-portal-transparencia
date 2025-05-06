@@ -18,6 +18,11 @@ def coletar_dados(inputData):
             f"https://portaldatransparencia.gov.br/pessoa-fisica/busca/lista?termo={inputData}&pagina=1&tamanhoPagina=10"
         )
 
+        results = {
+            "termo_da_busca": inputData,
+            "data_consulta": datetime.now().isoformat(),
+        }
+
         page.wait_for_load_state("load")
 
         cookie_btn = page.locator("#accept-all-btn")
@@ -51,6 +56,18 @@ def coletar_dados(inputData):
         beneficts = []
         benefict_deatils = []
 
+        screenshot_path = f"page_{datetime.now().isoformat()}.png"
+        page.screenshot(path=screenshot_path, full_page=True)
+
+        person_data_row = page.locator("section.dados-tabelados > div.row > div").all()
+
+        for person_data_index, person_data in enumerate(person_data_row):
+            if person_data_index == len(person_data_row) - 1:
+                break
+            key = person_data.locator("strong").inner_text().strip().lower()
+            value = person_data.locator("span").inner_text().strip()
+            results[key] = value
+
         all_beneficts = page.locator("div.responsive > table > tbody > tr").count()
 
         for benefict_index in range(all_beneficts):
@@ -70,14 +87,14 @@ def coletar_dados(inputData):
 
             page.wait_for_load_state("load")
 
-            sleep(15)
-
-            page.wait_for_load_state("load")
+            if benefict_index == 0:
+                sleep(13)
+                page.wait_for_load_state("load")
+            else:
+                sleep(1)
 
             if cookie_btn.is_visible():
                 cookie_btn.click()
-
-            screenshot_path = f"page_{datetime.now().isoformat()}.png"
 
             recieved_incomes_thead = page.locator("th").all()
 
@@ -99,16 +116,9 @@ def coletar_dados(inputData):
                     data[recieved_incomes_keys[i]] = td.inner_text().strip()
                     benefict_deatils.append(data)
 
-            page.screenshot(path=screenshot_path, full_page=True)
-
-            with open(screenshot_path, "rb") as img_file:
-                imagem_base64 = base64.b64encode(img_file.read()).decode("utf-8")
-
             actual_benefict["detalhes"] = benefict_deatils
-            # actual_benefict["screenshot_base64"] = imagem_base64
             beneficts.append(actual_benefict)
-
-            os.remove(screenshot_path)
+            results["beneficios"] = beneficts
 
             page.go_back()
             page.wait_for_load_state("load")
@@ -117,13 +127,12 @@ def coletar_dados(inputData):
                 cookie_btn.click()
             page.locator("button.header").nth(0).click()
 
-        results = {
-            "termo_da_busca": inputData,
-            "data_consulta": datetime.now().isoformat(),
-            "beneficios": beneficts,
-        }
-
         browser.close()
+        with open(screenshot_path, "rb") as img_file:
+            results["screenshot_base64"] = base64.b64encode(img_file.read()).decode(
+                "utf-8"
+            )
+        os.remove(screenshot_path)
 
         return results
 
