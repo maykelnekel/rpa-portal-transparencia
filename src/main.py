@@ -6,28 +6,48 @@ from datetime import datetime
 from time import sleep
 
 
-def coletar_dados(inputData):
+def coletar_dados(inputData: str, filter: bool = False) -> dict:
     with sync_playwright() as p:
+        results = {
+            "termo_da_busca": inputData,
+            "data_consulta": datetime.now().isoformat(),
+        }
         browser = p.firefox.launch(headless=False)
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         )
         page = context.new_page()
 
-        page.goto(
-            f"https://portaldatransparencia.gov.br/pessoa-fisica/busca/lista?termo={inputData}&pagina=1&tamanhoPagina=10"
-        )
-
-        results = {
-            "termo_da_busca": inputData,
-            "data_consulta": datetime.now().isoformat(),
-        }
+        page.goto("https://portaldatransparencia.gov.br/pessoa/visao-geral")
 
         page.wait_for_load_state("load")
 
         cookie_btn = page.locator("#accept-all-btn")
+
         if cookie_btn.is_visible():
             cookie_btn.click()
+
+        page.locator("a#link-consulta-pessoa-fisica").click()
+
+        page.wait_for_load_state("load")
+
+        if cookie_btn.is_visible():
+            cookie_btn.click()
+
+        sleep(1)
+
+        if filter is True:
+            page.locator("button.header").click()
+            sleep(1)
+            page.locator("div.br-checkbox").filter(
+                has_text="Beneficiário de Programa Social"
+            ).click()
+
+        input_field = page.locator("#termo")
+        if input_field.is_visible() and input_field.is_enabled():
+            input_field.fill(inputData)
+            sleep(1)
+            input_field.press("Enter")
 
         page.wait_for_selector("span#resultados")
 
@@ -134,12 +154,14 @@ def coletar_dados(inputData):
             )
         os.remove(screenshot_path)
 
+        results["data_consulta"] = datetime.now().isoformat()
+
         return results
 
 
 # 1.611.461.617-1
 def main():
-    dados = coletar_dados("1.611.461.617-1")
+    dados = coletar_dados(inputData="1.611.461.617-1", filter=True)
     with open("results.json", "w") as f:
         json.dump(dados, f, indent=2, ensure_ascii=False)
 
