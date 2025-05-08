@@ -11,7 +11,7 @@ class PersonDetails(BaseModel):
     valor: str
 
 
-class Person(BaseModel):
+class PersonBenefict(BaseModel):
     nome_do_beneficio: str
     valor: str
     detalhes: list[PersonDetails]
@@ -20,7 +20,7 @@ class Person(BaseModel):
 class SearchResults(BaseModel):
     termo_da_busca: str
     data_consulta: datetime
-    beneficios: list[Person]
+    beneficios: list[PersonBenefict]
     screenshot_base64: str
 
 

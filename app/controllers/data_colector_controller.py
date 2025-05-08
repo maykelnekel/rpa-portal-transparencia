@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Response, Body
 
-from app.services.data_collector_service import collect_data_async
+from app.services.data_collector_service import collect_data_async_service
 from app.models.collect_data import CollectDataRequest
 from app.models.person import SearchResultsResponse
 
@@ -40,7 +40,7 @@ async def collect_data_endpoint(
     )
 ) -> SearchResultsResponse:
     try:
-        results = await collect_data_async(body.input_data, body.filter)
+        results = await collect_data_async_service(body.input_data, body.filter)
         response: SearchResultsResponse = {"status": "sucesso", "resultados": results}
         return Response(content=json.dumps(response), media_type="application/json")
     except ValueError as e:
