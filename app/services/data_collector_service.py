@@ -50,13 +50,11 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
 
         await page.mouse.move(random.random() * 800, random.random() * 800)
 
-        await asyncio.sleep(1)
-
         await page.mouse.move(random.random() * 800, random.random() * 800)
 
         if filter is True:
             await page.locator("button.header").click()
-            await asyncio.sleep(1)
+
             await page.locator("div.br-checkbox").filter(
                 has_text="Beneficiário de Programa Social"
             ).click()
@@ -66,7 +64,7 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
         input_field = page.locator("#termo")
         if await input_field.is_visible() and await input_field.is_enabled():
             await input_field.fill(input_data)
-            await asyncio.sleep(1)
+
             await input_field.press("Enter")
 
         await page.mouse.move(random.random() * 800, random.random() * 800)
@@ -159,20 +157,10 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
 
             await page.mouse.move(random.random() * 800, random.random() * 800)
 
-            if benefict_index == 0:
-                await asyncio.sleep(13)
-                await page.wait_for_load_state("load")
-            else:
-                await asyncio.sleep(1)
-
-            await page.mouse.move(random.random() * 800, random.random() * 800)
-
             if await cookie_btn.is_visible():
                 await cookie_btn.click()
 
             recieved_incomes_thead = await page.locator("th").all()
-
-            await asyncio.sleep(1)
 
             await page.mouse.move(random.random() * 800, random.random() * 800)
 
@@ -184,8 +172,6 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
                 recieved_incomes_keys.append(text.strip())
 
             await page.mouse.move(random.random() * 800, random.random() * 800)
-
-            await asyncio.sleep(1)
 
             recieved_incomes_values = await page.locator("tr").all()
 
@@ -209,8 +195,6 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
 
             await page.go_back()
             await page.wait_for_load_state("load")
-
-            await asyncio.sleep(1)
 
             if await cookie_btn.is_visible():
                 await cookie_btn.click()
