@@ -167,7 +167,6 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
             recieved_incomes_keys = []
 
             for th in recieved_incomes_thead:
-
                 text = await th.inner_text()
                 recieved_incomes_keys.append(text.strip())
 
@@ -176,7 +175,6 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
             recieved_incomes_values = await page.locator("tr").all()
 
             for tr in recieved_incomes_values:
-
                 await page.mouse.move(random.random() * 800, random.random() * 800)
 
                 item = await tr.locator("td").all()
@@ -217,7 +215,7 @@ async def collect_data_async(input_data: str, filter: bool = False) -> SearchRes
         print(f"An error occurred: {e}")
         raise ValueError(
             {
-                "message": str(e),
+                "mensagem": str(e),
                 "termo_da_busca": input_data,
                 "data_consulta": datetime.now().isoformat(),
             }
