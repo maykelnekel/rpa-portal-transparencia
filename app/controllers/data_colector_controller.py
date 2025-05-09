@@ -5,6 +5,7 @@ from fastapi import APIRouter, Response, Body
 from app.services.data_collector_service import collect_data_async_service
 from app.models.collect_data import CollectDataRequest
 from app.models.person import SearchResultsResponse
+from app.models.error import CustomErrorModel
 from app.utils.errors.CustomError import CustomError
 
 data_collector_router = APIRouter()
@@ -19,14 +20,29 @@ data_collector_router = APIRouter()
             "description": "Coleta de dados bem-sucedida",
             "model": SearchResultsResponse,
         },
-        400: {
-            "description": "Erro de valor nos dados de entrada",
+        404: {
+            "description": "Nenhuma pessoa física encontrada com os dados fornecidos",
+            "model": CustomErrorModel,
         },
         422: {
-            "description": "Erro de validação",
+            "description": "Erro de validação dos dados",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": [
+                            {
+                                "loc": ["body", "input_data"],
+                                "msg": "field required",
+                                "type": "value_error.missing",
+                            }
+                        ]
+                    }
+                }
+            },
         },
         500: {
             "description": "Erro interno do servidor",
+            "model": CustomErrorModel,
         },
     },
 )

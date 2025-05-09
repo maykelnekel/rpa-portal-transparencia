@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
-class CustomError(BaseModel):
-    mensagem: str
-    termo_da_busca: str
+class CustomErrorModel(BaseModel):
+    error: str
     data_consulta: datetime

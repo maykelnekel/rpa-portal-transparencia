@@ -18,6 +18,14 @@ Este projeto é um Robô de Processamento de Atividades (RPA) que automatiza a c
 - [Playwright](https://playwright.dev/)
 - [Patchright](https://pypi.org/project/patchright/)
 
+## Documentação
+
+**Essa api foi documentada com Swagger.**
+
+Você terá acesso à documentação através do endpoint `/docs`
+
+Se estiver rodando a API localmente deverá conseguir acessar em [localhost:8000/docs](localhost:8000/docs)
+
 ## Instalação
 
 1. Clone o repositório: `git clone https://github.com/maykelnekel/rpa-portal-transparencia.git`
