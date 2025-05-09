@@ -1,0 +1,718 @@
+{
+	"info": {
+		"_postman_id": "a700684f-df87-408d-9845-816d2ef34104",
+		"name": "/collect_data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21907791"
+	},
+	"item": [
+		{
+			"name": "SUCESSO - nome + filtro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"sandra lima\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SUCESSO - apenas nome",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"sandra correia tiburcio\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SUCESSO - CPF + filtro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"028.545.390-44\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SUCESSO - apenas CPF",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"028.545.390-44\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SUCESSO - NIS + filtro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"1.233.935.396-5\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SUCESSO - apenas NIS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Fixed ReferenceError by defining the 'describe' function",
+							"console.log(`Logging information to the console`)",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('status');",
+							"    pm.expect(responseData).to.have.property('resultados');",
+							"    pm.expect(responseData.resultados).to.have.property('termo_da_busca');",
+							"    pm.expect(responseData.resultados).to.have.property('data_consulta');",
+							"    pm.expect(responseData.resultados).to.have.property('nome');",
+							"    pm.expect(responseData.resultados).to.have.property('localidade');",
+							"    pm.expect(responseData.resultados).to.have.property('beneficios');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('nome_do_beneficio');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('valor');",
+							"    pm.expect(responseData.resultados.beneficios[0]).to.have.property('detalhes');",
+							"    pm.expect(responseData.resultados).to.have.property('screenshot_base64');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of 'beneficios' array and its elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    const beneficios = responseData.resultados.beneficios",
+							"    pm.expect(beneficios).to.be.an('array')",
+							"",
+							"    beneficios.forEach(function(beneficio) {",
+							"        pm.expect(beneficio).to.be.an('object');",
+							"        pm.expect(beneficio.nome_do_beneficio).to.be.a('string');",
+							"        pm.expect(beneficio.valor).to.exist.and.to.be.a('string');",
+							"        pm.expect(beneficio.detalhes).to.be.an('array')",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"1.233.935.396-5\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FALHA - nome inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test for response status code",
+							"pm.test(\"Response code is 404\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"",
+							"// Test for response body properties",
+							"pm.test(\"Response body has expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"});",
+							"",
+							"pm.test(\"Response messa expected for Name\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"    pm.expect(responseData.erro).to.be.eq('Foram encontrados 0 resultados para o termo…');",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"hj iu njsd\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FALHA - CPF inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test for response status code",
+							"pm.test(\"Response code is 404\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"",
+							"// Test for response body properties",
+							"pm.test(\"Response body has expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"});",
+							"",
+							"pm.test(\"Response messa expected for Name\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"    pm.expect(responseData.erro).to.be.eq('Não foi possível retornar os dados no tempo de resposta solicitado');",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"091.918.123-24\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FALHA - NIS inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test for response status code",
+							"pm.test(\"Response code is 404\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"",
+							"// Test for response body properties",
+							"pm.test(\"Response body has expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"});",
+							"",
+							"pm.test(\"Response messa expected for Name\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData).to.have.property('erro');",
+							"    pm.expect(responseData).to.have.property('data_consulta');",
+							"    pm.expect(responseData.erro).to.be.eq('Não foi possível retornar os dados no tempo de resposta solicitado');",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"input_data\": \"5.232.935.596-5\", \"filter\": true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/collect_data",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"collect_data"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
