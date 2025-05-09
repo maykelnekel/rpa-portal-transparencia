@@ -22,9 +22,9 @@ Este projeto é um Robô de Processamento de Atividades (RPA) que automatiza a c
 
 **Essa api foi documentada com Swagger.**
 
-Você terá acesso à documentação através do endpoint `/docs`
+[Clique aqui para acessar a documentação](https://rpa-portal-transparencia.onrender.com/docs)
 
-Se estiver rodando a API localmente deverá conseguir acessar em [localhost:8000/docs](localhost:8000/docs)
+Se estiver rodando a API localmente, você terá acesso à documentação através do endpoint `/docs`. Deverá conseguir acessar em [localhost:8000/docs](localhost:8000/docs)
 
 ## Instalação
 
