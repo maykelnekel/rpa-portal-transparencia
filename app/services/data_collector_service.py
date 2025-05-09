@@ -289,8 +289,10 @@ async def collect_data_async_service(
         return results
 
     except CustomError as e:
-        await browser.close()
+        if browser:
+            await browser.close()
         raise CustomError(e.mensagem, e.status_code)
     except Exception as e:
-        await browser.close()
+        if browser:
+            await browser.close()
         raise e
