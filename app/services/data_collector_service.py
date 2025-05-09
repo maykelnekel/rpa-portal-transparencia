@@ -14,6 +14,7 @@ from app.utils.handle_mouse_move import handle_mouse_move
 from app.utils.errors.CustomError import CustomError
 from app.utils.validate_if_is_name_cpf_or_nis import validate_if_is_name_cpf_or_nis
 
+
 screenshot_path = "page.png"
 
 
@@ -206,6 +207,8 @@ async def get_beneficts(
 async def collect_data_async_service(
     input_data: str, filter: bool = False
 ) -> SearchResults:
+    browser = None
+
     try:
         results: SearchResults = {
             "termo_da_busca": input_data,
