@@ -1,6 +1,5 @@
 # crie um CustomError que herda de Exception
 class CustomError(Exception):
-    def __init__(self, mensagem, termo_da_busca, data_consulta):
+    def __init__(self, mensagem, status_code):
         self.mensagem = mensagem
-        self.termo_da_busca = termo_da_busca
-        self.data_consulta = data_consulta
+        self.status_code = status_code

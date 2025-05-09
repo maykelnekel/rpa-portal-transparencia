@@ -1,10 +1,11 @@
 import json
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, Response, Body
+from fastapi import APIRouter, Response, Body
 
 from app.services.data_collector_service import collect_data_async_service
 from app.models.collect_data import CollectDataRequest
 from app.models.person import SearchResultsResponse
+from app.utils.errors.CustomError import CustomError
 
 data_collector_router = APIRouter()
 
@@ -43,23 +44,27 @@ async def collect_data_endpoint(
         results = await collect_data_async_service(body.input_data, body.filter)
         response: SearchResultsResponse = {"status": "sucesso", "resultados": results}
         return Response(content=json.dumps(response), media_type="application/json")
-    except ValueError as e:
+    except CustomError as e:
         print(f"Erro de valor: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "mensagem": str(e),
-                "termo_da_busca": body.input_data,
-                "data_consulta": datetime.now().isoformat(),
-            },
+        return Response(
+            status_code=e.status_code,
+            media_type="application/json",
+            content=json.dumps(
+                {
+                    "erro": e.mensagem,
+                    "data_consulta": datetime.now().isoformat(),
+                },
+            ),
         )
     except Exception as er:
-        print(f"Erro inesperado: {er}")
-        raise HTTPException(
+        print(f"Internal server error: {er}")
+        return Response(
             status_code=500,
-            detail={
-                "mensagem": "Erro inesperado",
-                "termo_da_busca": body.input_data,
-                "data_consulta": datetime.now().isoformat(),
-            },
+            media_type="application/json",
+            content=json.dumps(
+                {
+                    "erro": "Houve um erro inesperado no servidor.",
+                    "data_consulta": datetime.now().isoformat(),
+                },
+            ),
         )

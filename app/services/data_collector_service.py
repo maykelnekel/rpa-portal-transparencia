@@ -12,6 +12,7 @@ from app.models.person import PersonBenefict, PersonDetails
 from app.utils.wait_for_page_loading import wait_for_page_loading
 from app.utils.handle_mouse_move import handle_mouse_move
 from app.utils.errors.CustomError import CustomError
+from app.utils.validate_if_is_name_cpf_or_nis import validate_if_is_name_cpf_or_nis
 
 screenshot_path = "page.png"
 
@@ -70,8 +71,6 @@ async def search_person_and_access_data(
 
     await handle_mouse_move(page)
 
-    await page.wait_for_selector("span#resultados")
-
     await handle_mouse_move(page)
 
     search_name_link = page.locator("a.link-busca-nome").nth(0)
@@ -79,7 +78,17 @@ async def search_person_and_access_data(
         await handle_mouse_move(page)
         await search_name_link.click()
     else:
-        raise Exception(f"no data was found for {input_data}")
+        validation = validate_if_is_name_cpf_or_nis(input_data)
+        if validation == "name":
+            raise CustomError(
+                "Foram encontrados 0 resultados para o termo…",
+                404,
+            )
+        else:
+            raise CustomError(
+                "Não foi possível retornar os dados no tempo de resposta solicitado",
+                404,
+            )
 
     await wait_for_page_loading(page)
 
@@ -164,11 +173,9 @@ async def get_beneficts(
         if await cookie_btn.is_visible():
             await cookie_btn.click()
 
+        asyncio.sleep(1)
+
         recieved_incomes_thead = await page.locator("th").all()
-
-        await handle_mouse_move(page)
-
-        await handle_mouse_move(page)
 
         recieved_incomes_values = await page.locator("tr").all()
 
@@ -277,12 +284,10 @@ async def collect_data_async_service(
         results["data_consulta"] = datetime.now().isoformat()
 
         return results
+
+    except CustomError as e:
+        await browser.close()
+        raise CustomError(e.mensagem, e.status_code)
     except Exception as e:
-        with os.open(screenshot_path, "rb") as img_file:
-            os.remove(screenshot_path)
-        print(f"An error occurred: {e}")
-        raise CustomError(
-            mensagem=str(e),
-            termo_da_busca=input_data,
-            data_consulta=datetime.now().isoformat(),
-        )
+        await browser.close()
+        raise e
